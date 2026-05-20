@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # ──────────────────────────────────────────────────────────
 # Backup — creates a snapshot of everything on the VPS
-# Run from the VPS or via SSH
+# Run from the VPS or locally: ssh user@host bash < backup.sh
 # ──────────────────────────────────────────────────────────
-set -euo pipefail
 
 DATE=$(date +%F_%H%M)
 BACKUP_DIR="$HOME/backups/ersa-$DATE"
@@ -12,24 +11,23 @@ IMMICH_DIR="$HOME/immich"
 echo "==> Creating backup at $BACKUP_DIR"
 mkdir -p "$BACKUP_DIR"/{immich-db,immich-photos,configs}
 
-# ── Immich database dump ──
+# Immich database dump
 echo "==> Dumping Immich database..."
 podman exec immich_postgres pg_dump -U postgres -d immich -c \
   > "$BACKUP_DIR/immich-db/immich-db-$DATE.sql"
 echo "    DB dump: $(wc -c < "$BACKUP_DIR/immich-db/immich-db-$DATE.sql") bytes"
 
-# ── Immich config ──
-echo "==> Copying Immich config..."
+# Immich config
 cp "$IMMICH_DIR/.env" "$BACKUP_DIR/configs/immich.env" 2>/dev/null || true
 
-# ── Immich Photos (hardlink — instant, no extra space) ──
+# Immich Photos (real copy)
 if [ -d "$IMMICH_DIR/Photos" ]; then
-  echo "==> Hard-linking Immich Photos..."
-  cp -al "$IMMICH_DIR/Photos" "$BACKUP_DIR/immich-photos/"
+  echo "==> Copying Immich Photos..."
+  cp -a "$IMMICH_DIR/Photos" "$BACKUP_DIR/immich-photos/"
   echo "    Photos: $(du -sh "$BACKUP_DIR/immich-photos/" | cut -f1)"
 fi
 
-# ── Service configs ──
+# Service configs
 echo "==> Copying service configs..."
 cp -r "$HOME/copyparty/copyparty.conf" "$BACKUP_DIR/configs/" 2>/dev/null || true
 cp -r "$HOME/radicale/config" "$BACKUP_DIR/configs/" 2>/dev/null || true
