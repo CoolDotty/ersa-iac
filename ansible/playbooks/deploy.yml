@@ -69,7 +69,7 @@
         src: ../files/supervisord/conf.d/tiny-stats.ini
         dest: "{{ user_home }}/.config/supervisord/conf.d/tiny-stats.ini"
         mode: 0600
-      when: services.tiny-stats.enabled
+      when: services["tiny-stats"].enabled
       notify: reload supervisord
 
     - name: Supervisor starts on reboot via cron
@@ -77,6 +77,12 @@
         name: start_supervisord
         job: "{{ supervisor_venv }}/bin/supervisord -c {{ supervisor_config }}"
         special_time: reboot
+
+    - name: Start supervisord if not running
+      command: "{{ supervisor_venv }}/bin/supervisord -c {{ supervisor_config }}"
+      register: sv_start
+      changed_when: "'already running' not in sv_start.stderr"
+      failed_when: false
 
     - name: Validate supervisor config
       command: "{{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} status"
@@ -91,8 +97,8 @@
 
   handlers:
     - name: reload supervisord
-      command: >
-        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} reread &&
+      shell: |
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} reread
         {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} update
       listen: "reload supervisord"
 
