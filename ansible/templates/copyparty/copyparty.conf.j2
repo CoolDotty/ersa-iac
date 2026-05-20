@@ -1,0 +1,16 @@
+[global]
+    p: {{ copyparty_port }}
+    xvol
+    ah-alg: argon2
+    shr: /shr
+    shr-adm: {{ ansible_user_id }}
+    e2dsa
+    e2ts
+
+[accounts]
+    {{ ansible_user_id }}: {{ vault_copyparty_password_hash }}
+
+[/files]
+    {{ user_home }}/files
+    accs:
+        A: {{ ansible_user_id }}

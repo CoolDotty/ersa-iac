@@ -1,0 +1,19 @@
+all:
+  hosts:
+    ersa:
+      ansible_host: ersa.whatbox.ca
+      ansible_user: dotanarchy
+      ansible_ssh_private_key_file: ~/.ssh/dot
+      ansible_python_interpreter: /usr/bin/python3.12
+      ansible_shell_type: sh
+      immich_port: 2283
+      copyparty_port: 19720
+      radicale_port: 5232
+      deluge_web_port: 8112
+      tiny_stats_port: 7828
+      jellyfin_port: 8096
+      user_home: /home/dotanarchy
+      supervisor_venv: "{{ user_home }}/.supervisor"
+      supervisor_config: "{{ user_home }}/.config/supervisord/supervisord.conf"
+      supervisor_log_dir: "{{ user_home }}/.supervisor/logs"
+      supervisor_run_dir: "{{ user_home }}/.supervisor/run"

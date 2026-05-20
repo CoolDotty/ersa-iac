@@ -1,0 +1,4 @@
+vault_cloudflared_token: "eyJhIjoi..."
+vault_immich_db_password: "your-strong-password"
+vault_copyparty_password_hash: "+cTn2rE7V2X_hWUzHtyjVt5tLzCAk4BGX"
+vault_radicale_password_hash: "your-bcrypt-hash"

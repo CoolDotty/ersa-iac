@@ -1,0 +1,31 @@
+# ── Secrets ──────────────────────────────────────────────
+*.pem
+*.key
+ansible/vars/vault.yml
+ansible/vars/vault/
+.env
+
+# ── Data directories (keep on server, not in repo) ─────
+files/
+data/
+
+# ── Python / virtualenvs ────────────────────────────────
+__pycache__/
+*.pyc
+venv/
+.virtualenv/
+*.egg-info/
+
+# ── Node ─────────────────────────────────────────────────
+node_modules/
+
+# ── OS junk ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── IDE ──────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo

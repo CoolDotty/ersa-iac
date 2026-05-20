@@ -1,0 +1,169 @@
+---
+- name: Deploy services to ersa.whatbox.ca
+  hosts: ersa
+  gather_facts: true
+  vars_files:
+    - ../vars/main.yml
+
+  pre_tasks:
+    - name: Ensure supervisor installed
+      pip:
+        name: supervisor
+        virtualenv: "{{ supervisor_venv }}"
+        virtualenv_python: python3.12
+      changed_when: false
+
+    - name: Create required directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0700
+      loop:
+        - "{{ supervisor_log_dir }}"
+        - "{{ supervisor_run_dir }}"
+        - "{{ user_home }}/.config/supervisord"
+        - "{{ user_home }}/.config/supervisord/conf.d"
+
+  tasks:
+    - name: Deploy supervisord.conf
+      template:
+        src: ../files/supervisord/supervisord.conf
+        dest: "{{ supervisor_config }}"
+        mode: 0600
+      notify: reload supervisord
+
+    - name: Deploy Immich docker-compose.yml
+      copy:
+        src: ../files/immich/docker-compose.yml
+        dest: "{{ user_home }}/immich/docker-compose.yml"
+        mode: 0600
+      when: services.immich.enabled
+      notify: restart immich
+
+    - name: Deploy Immich .env
+      template:
+        src: ../templates/immich/immich.env.j2
+        dest: "{{ user_home }}/immich/.env"
+        mode: 0600
+      when: services.immich.enabled
+      notify: restart immich
+
+    - name: Deploy Immich supervisor config
+      template:
+        src: ../files/supervisord/conf.d/immich.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/immich.ini"
+        mode: 0600
+      when: services.immich.enabled
+      notify: reload supervisord
+
+    - name: Deploy Jellyfin supervisor config
+      template:
+        src: ../files/supervisord/conf.d/jellyfin.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/jellyfin.ini"
+        mode: 0600
+      when: services.jellyfin.enabled
+      notify: reload supervisord
+
+    - name: Deploy Copyparty config
+      template:
+        src: ../templates/copyparty/copyparty.conf.j2
+        dest: "{{ user_home }}/copyparty/copyparty.conf"
+        mode: 0600
+      when: services.copyparty.enabled
+      notify: restart copyparty
+
+    - name: Deploy Copyparty supervisor config
+      template:
+        src: ../files/supervisord/conf.d/copyparty.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/copyparty.ini"
+        mode: 0600
+      when: services.copyparty.enabled
+      notify: reload supervisord
+
+    - name: Deploy Radicale config
+      template:
+        src: ../templates/radicale/radicale.config.j2
+        dest: "{{ user_home }}/radicale/config"
+        mode: 0600
+      when: services.radicale.enabled
+      notify: restart radicale
+
+    - name: Deploy Radicale supervisor config
+      template:
+        src: ../files/supervisord/conf.d/radicale.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/radicale.ini"
+        mode: 0600
+      when: services.radicale.enabled
+      notify: reload supervisord
+
+    - name: Deploy Deluge supervisor config
+      template:
+        src: ../files/supervisord/conf.d/deluged.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/deluged.ini"
+        mode: 0600
+      when: services.deluge.enabled
+      notify: reload supervisord
+
+    - name: Deploy Deluge-web supervisor config
+      template:
+        src: ../files/supervisord/conf.d/deluge-web.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/deluge-web.ini"
+        mode: 0600
+      when: services.deluge-web.enabled
+      notify: reload supervisord
+
+    - name: Deploy Tiny-Stats supervisor config
+      template:
+        src: ../files/supervisord/conf.d/tiny-stats.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/tiny-stats.ini"
+        mode: 0600
+      when: services.tiny-stats.enabled
+      notify: reload supervisord
+
+    - name: Deploy Cloudflared supervisor config
+      template:
+        src: ../files/supervisord/conf.d/cloudflared.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/cloudflared.ini"
+        mode: 0600
+      when: services.cloudflared.enabled
+      notify: reload supervisord
+
+    - name: Supervisor starts on reboot via cron
+      cron:
+        name: start_supervisord
+        job: "{{ supervisor_venv }}/bin/supervisord -c {{ supervisor_config }}"
+        special_time: reboot
+
+    - name: Validate supervisor config
+      command: "{{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} status"
+      changed_when: false
+      ignore_errors: true
+      register: sv_status
+
+    - name: Show supervisor status
+      debug:
+        var: sv_status.stdout_lines
+      when: sv_status.stdout_lines is defined
+
+  handlers:
+    - name: reload supervisord
+      command: >
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} reread &&
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} update
+      listen: "reload supervisord"
+
+    - name: restart immich
+      shell: |
+        cd {{ user_home }}/immich
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} stop immich
+        podman-compose down && podman-compose up -d
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start immich
+      listen: "restart immich"
+
+    - name: restart copyparty
+      command: "{{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} restart copyparty"
+      listen: "restart copyparty"
+
+    - name: restart radicale
+      command: "{{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} restart radicale"
+      listen: "restart radicale"

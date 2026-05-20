@@ -1,0 +1,47 @@
+---
+- name: Bootstrap ersa.whatbox.ca
+  hosts: ersa
+  gather_facts: true
+  vars_files:
+    - ../vars/main.yml
+  tasks:
+    - name: Create base directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0700
+      loop:
+        - "{{ supervisor_log_dir }}"
+        - "{{ supervisor_run_dir }}"
+        - "{{ user_home }}/.config/supervisord/conf.d"
+
+    - name: Create supervisor virtualenv
+      pip:
+        name: supervisor
+        virtualenv: "{{ supervisor_venv }}"
+        virtualenv_python: python3.12
+
+    - name: Ensure data directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0700
+      loop:
+        - "{{ user_home }}/immich"
+        - "{{ user_home }}/files"
+        - "{{ user_home }}/watch"
+        - "{{ user_home }}/deluge-watch"
+        - "{{ user_home }}/.config/deluge"
+
+    - name: Ensure cloudflared is executable
+      file:
+        path: "{{ user_home }}/cloudflared"
+        mode: 0700
+      ignore_errors: true
+
+    - name: Report next steps
+      debug:
+        msg:
+          - "Bootstrap complete."
+          - "Next: ansible-playbook ansible/playbooks/deploy.yml"
+          - "Start supervisor now: {{ supervisor_venv }}/bin/supervisord -c {{ supervisor_config }}"
