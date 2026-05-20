@@ -8,18 +8,19 @@ via their control panel at [cp.whatbox.ca](https://cp.whatbox.ca) →
 
 | App | Subdomain | Target | WebSockets |
 |---|---|---|---|
-| [Immich](https://immich.app) | `photos` | `127.0.0.1:2283` | ✅ On |
-| [Copyparty](https://github.com/9001/copyparty) | `files` | `127.0.0.1:19720` | ❌ Off |
-| [Radicale](https://radicale.org) | `cal` | `127.0.0.1:5232` | ❌ Off |
-| [Tiny-Stats](https://github.com/dot/) | `stats` | `127.0.0.1:7828` | ✅ On |
-| Jellyfin | *(whatbox-managed)* | `127.0.0.1:8096` | ✅ On |
-| Deluge | *(whatbox-managed)* | `127.0.0.1:8112` | ❌ Off |
+| [Immich](https://immich.app) | `photos` | `127.0.0.1:2283` | On |
+| [Copyparty](https://github.com/9001/copyparty) | `files` | `127.0.0.1:19720` | On |
+| [Radicale](https://radicale.org) | `cal` | `127.0.0.1:5232` | Off |
+| [Tiny-Stats](https://github.com/dot/) | `stats` | `127.0.0.1:7828` | On |
+| Jellyfin | *(whatbox-managed)* | `127.0.0.1:8096` | On |
+| Deluge | *(whatbox-managed)* | `127.0.0.1:8112` | Off |
 
-**Immich** needs WebSockets for live upload progress, asset change notifications,
-and real-time album updates.
+**Immich** needs WebSockets for live upload progress and notifications.
 
-**Tiny-Stats** uses a WebSocket server to push live CPU/RAM/disk charts to the
-dashboard — without it the page loads but stays blank.
+**Copyparty** uses WebSockets for file browsing and transfer progress.
+
+**Tiny-Stats** uses a WebSocket server to push live CPU/RAM/disk charts to
+the dashboard — without it the page loads but stays blank.
 
 ## Whatbox CP Setup
 
@@ -29,7 +30,7 @@ dashboard — without it the page loads but stays blank.
    - **Source:** subdomain (e.g. `photos`)
    - **Target:** `127.0.0.1:<port>`
    - **Type:** HTTP proxy
-   - **WebSockets:** toggle on for Immich and Tiny-Stats
+   - **WebSockets:** toggle on for Immich, Copyparty, and Tiny-Stats
 
 ## DNS
 
