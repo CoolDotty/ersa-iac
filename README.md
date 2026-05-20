@@ -7,15 +7,15 @@ Gentoo Linux with user-scoped services.
 
 | Service | Port | Type | Config |
 |---|---|---|---|
-| **Your services (IaC-managed)** | | | |
+| **Your services (supervisord-managed)** | | | |
 | [Immich](https://immich.app) | 2283 | podman-compose | `ansible/files/immich/` |
-| [Copyparty](https://github.com/9001/copyparty) | 19720 | Python (venv) | `ansible/templates/copyparty/` |
-| [Radicale](https://radicale.org) | 5232 | Python (venv) | `ansible/templates/radicale/` |
-| Tiny-Stats | 7828 | Node.js | `ansible/files/supervisord/conf.d/` |
+| [Copyparty](https://github.com/9001/copyparty) | 19720 | Python (venv) | service config lives on VPS |
+| [Radicale](https://radicale.org) | 5232 | Python (venv) | service config lives on VPS |
+| Tiny-Stats | 7828 | Node.js | service config lives on VPS |
 | **Whatbox-managed (pre-installed)** | | | |
-| Jellyfin | 8096 | Native | via Whatbox panel |
-| Deluge + WebUI | 8112 | Native | via Whatbox panel |
-| Helm file browser | — | Native | via Whatbox panel |
+| Jellyfin | 8096 | Native | via Whatbox CP panel |
+| Deluge + WebUI | 8112 | Native | via Whatbox CP panel |
+| Helm file browser | — | Native | via Whatbox CP panel |
 
 ## Architecture
 
@@ -33,62 +33,44 @@ Gentoo Linux with user-scoped services.
    └──────────────────────┘
 ```
 
-## Quick Start
+## Usage
 
 ```bash
-# 1. Fill in secrets
-cp ansible/vars/vault.yml.example ansible/vars/vault.yml
-# Edit vault.yml with your tokens/passwords
+# 1. Bootstrap (one-time) — install supervisor, create dirs
+ansible-playbook ansible/playbooks/bootstrap.yml
 
-# 2. Bootstrap (one-time): install supervisor, create dirs
+# 2. Deploy — push configs, update services
+ansible-playbook ansible/playbooks/deploy.yml
+```
+
+Or use the convenience scripts:
+```bash
 ./scripts/bootstrap.sh
-
-# 3. Deploy: push all configs, restart services
 ./scripts/deploy.sh
 ```
 
-## Structure
+## What This Manages
 
-```
-ersa-iac/
-├── ansible/
-│   ├── ansible.cfg          # Ansible config
-│   ├── inventory.yml        # Host: ersa.whatbox.ca
-│   ├── playbooks/
-│   │   ├── bootstrap.yml    # One-time setup
-│   │   └── deploy.yml       # Config + service deploy
-│   ├── files/
-│   │   ├── immich/          # Static compose files
-│   │   └── supervisord/     # Supervisor defs + config
-│   ├── templates/           # Jinja2 templates
-│   └── vars/
-│       ├── main.yml         # Service definitions
-│       └── vault.yml.example # Secrets template
-├── docs/
-│   ├── reverse-proxy.md     # Whatbox CP proxy mappings
-│   └── services.md          # Per-service reference
-├── scripts/
-│   ├── bootstrap.sh         # Bootstrap runner
-│   ├── deploy.sh            # Deploy runner
-│   └── vps-cron.sh          # @reboot supervisor starter
-├── .gitignore
-└── README.md
-```
+This repo handles **process management** only — it ensures your custom
+services stay running and restart on crash or reboot via `supervisord`.
 
-## Data vs Config
+**Config files** for each service (.env, copyparty.conf, radicale config)
+live directly on the VPS and are not versioned here. Back them up separately.
 
-Your **data stays on the VPS** — never in Git:
+## Data
+
+Your data stays on the VPS — never in Git:
 
 | In Git (Config) | On VPS (Data) |
 |---|---|
 | `docker-compose.yml` | `~/immich/Photos/` |
-| `copyparty.conf` | `~/files/` |
 | Supervisor `.ini` files | `~/immich/postgres/` |
-| `immich.env.j2` (template) | All 11TB+ mpath drives |
+| | `~/files/` |
+| | All 11TB+ mpath drives |
 
-## Remote Repo
+## Reverse Proxy
 
-```bash
-git remote add origin <your-repo-url>
-git push -u origin master
-```
+All services route through Whatbox's shared nginx. Configure subdomain →
+port mappings at [cp.whatbox.ca](https://cp.whatbox.ca) → Domain/Proxy Setup.
+
+See [`docs/reverse-proxy.md`](docs/reverse-proxy.md) for the port reference.

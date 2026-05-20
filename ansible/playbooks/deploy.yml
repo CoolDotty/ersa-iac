@@ -40,14 +40,6 @@
       when: services.immich.enabled
       notify: restart immich
 
-    - name: Deploy Immich .env
-      template:
-        src: ../templates/immich/immich.env.j2
-        dest: "{{ user_home }}/immich/.env"
-        mode: 0600
-      when: services.immich.enabled
-      notify: restart immich
-
     - name: Deploy Immich supervisor config
       template:
         src: ../files/supervisord/conf.d/immich.ini
@@ -56,14 +48,6 @@
       when: services.immich.enabled
       notify: reload supervisord
 
-    - name: Deploy Copyparty config
-      template:
-        src: ../templates/copyparty/copyparty.conf.j2
-        dest: "{{ user_home }}/copyparty/copyparty.conf"
-        mode: 0600
-      when: services.copyparty.enabled
-      notify: restart copyparty
-
     - name: Deploy Copyparty supervisor config
       template:
         src: ../files/supervisord/conf.d/copyparty.ini
@@ -71,14 +55,6 @@
         mode: 0600
       when: services.copyparty.enabled
       notify: reload supervisord
-
-    - name: Deploy Radicale config
-      template:
-        src: ../templates/radicale/radicale.config.j2
-        dest: "{{ user_home }}/radicale/config"
-        mode: 0600
-      when: services.radicale.enabled
-      notify: restart radicale
 
     - name: Deploy Radicale supervisor config
       template:

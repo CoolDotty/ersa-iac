@@ -1,22 +1,6 @@
+# Service definitions — used by deploy playbook
 services:
-  immich:
-    enabled: true
-    type: podman-compose
-    path: "{{ user_home }}/immich"
-    supervisor_program: immich
-  copyparty:
-    enabled: true
-    type: python-venv
-    path: "{{ user_home }}/copyparty"
-    supervisor_program: copyparty
-  radicale:
-    enabled: true
-    type: python-venv
-    path: "{{ user_home }}/radicale"
-    supervisor_program: radicale
-  tiny-stats:
-    enabled: true
-    type: node
-    path: "{{ user_home }}/tiny-stats"
-    supervisor_program: tiny-stats
-    entrypoint: server.js
+  immich: { enabled: true, supervisor_program: immich }
+  copyparty: { enabled: true, supervisor_program: copyparty }
+  radicale: { enabled: true, supervisor_program: radicale }
+  tiny-stats: { enabled: true, supervisor_program: tiny-stats }
