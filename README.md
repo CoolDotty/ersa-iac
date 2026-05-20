@@ -11,8 +11,7 @@ Gentoo Linux with user-scoped services.
 | [Immich](https://immich.app) | 2283 | podman-compose | `ansible/files/immich/` |
 | [Copyparty](https://github.com/9001/copyparty) | 19720 | Python (venv) | `ansible/templates/copyparty/` |
 | [Radicale](https://radicale.org) | 5232 | Python (venv) | `ansible/templates/radicale/` |
-| Tiny-Stats | 7828 | Node.js | supervisord managed |
-| Cloudflare Tunnel | — | Go binary | supervisord managed |
+| Tiny-Stats | 7828 | Node.js | `ansible/files/supervisord/conf.d/` |
 | **Whatbox-managed (pre-installed)** | | | |
 | Jellyfin | 8096 | Native | via Whatbox panel |
 | Deluge + WebUI | 8112 | Native | via Whatbox panel |
@@ -21,20 +20,17 @@ Gentoo Linux with user-scoped services.
 ## Architecture
 
 ```
-         Cloudflare
-       (cloudflared)
-            │
     Whatbox Shared Nginx
    (configured via CP panel)
             │
    user@ersa.whatbox.ca
-   ┌─────────────────────┐
-   │     supervisord      │
-   │  ┌──────┬──────┬───┐ │
-   │  │immich│native│node│ │
-   │  │compose│binals│js │ │
-   │  └──────┴──────┴───┘ │
-   └─────────────────────┘
+   ┌──────────────────────┐
+   │     supervisord       │
+   │  ┌──────┬──────┬────┐ │
+   │  │immich│python│node│ │
+   │  │compose│ venvs │ js │ │
+   │  └──────┴──────┴────┘ │
+   └──────────────────────┘
 ```
 
 ## Quick Start

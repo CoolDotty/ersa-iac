@@ -29,14 +29,6 @@
       loop:
         - "{{ user_home }}/immich"
         - "{{ user_home }}/files"
-        - "{{ user_home }}/watch"
-        - "{{ user_home }}/deluge-watch"
-
-    - name: Ensure cloudflared is executable
-      file:
-        path: "{{ user_home }}/cloudflared"
-        mode: 0700
-      ignore_errors: true
 
     - name: Report next steps
       debug:

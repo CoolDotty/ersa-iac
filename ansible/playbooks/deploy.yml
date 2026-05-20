@@ -96,14 +96,6 @@
       when: services.tiny-stats.enabled
       notify: reload supervisord
 
-    - name: Deploy Cloudflared supervisor config
-      template:
-        src: ../files/supervisord/conf.d/cloudflared.ini
-        dest: "{{ user_home }}/.config/supervisord/conf.d/cloudflared.ini"
-        mode: 0600
-      when: services.cloudflared.enabled
-      notify: reload supervisord
-
     - name: Supervisor starts on reboot via cron
       cron:
         name: start_supervisord
