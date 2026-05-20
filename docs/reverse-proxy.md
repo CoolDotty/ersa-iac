@@ -34,9 +34,21 @@ the dashboard — without it the page loads but stays blank.
 
 ## DNS
 
-Point your domain's subdomains to:
+Point your domain's subdomains to the target shown in the Whatbox panel:
+
+1. Go to https://whatbox.ca/manage/domain
+2. Look for your **Server Hostname** or **IP** — use that as your DNS target
+3. Create **CNAME** records (or A records if using an IP):
 
 ```
-Type: A (or CNAME)
-Target: ersa.whatbox.ca  (or the IP from your Whatbox panel)
+*.yourdomain.com → <target from Whatbox panel>
+```
+
+Or individual subdomains:
+
+```
+photos.yourdomain.com → <target from Whatbox panel>
+files.yourdomain.com  → <target from Whatbox panel>
+cal.yourdomain.com    → <target from Whatbox panel>
+stats.yourdomain.com  → <target from Whatbox panel>
 ```
