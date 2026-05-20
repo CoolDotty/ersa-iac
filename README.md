@@ -71,6 +71,6 @@ Your data stays on the VPS — never in Git:
 ## Reverse Proxy
 
 All services route through Whatbox's shared nginx. Configure subdomain →
-port mappings at [cp.whatbox.ca](https://cp.whatbox.ca) → Domain/Proxy Setup.
+port mappings at [whatbox.ca/manage/domain](https://whatbox.ca/manage/domain) → Domain/Proxy Setup.
 
 See [`docs/reverse-proxy.md`](docs/reverse-proxy.md) for the port reference.

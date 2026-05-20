@@ -1,7 +1,7 @@
 # Reverse Proxy Configuration
 
 All services route through **Whatbox's shared nginx** (apphost), configured
-via their control panel at [cp.whatbox.ca](https://cp.whatbox.ca) →
+via their control panel at [whatbox.ca/manage/domain](https://whatbox.ca/manage/domain) →
 **Domain / Proxy Setup**.
 
 ## Proxy Mappings
@@ -24,7 +24,7 @@ the dashboard — without it the page loads but stays blank.
 
 ## Whatbox CP Setup
 
-1. Log into https://cp.whatbox.ca
+1. Log into https://whatbox.ca/manage/domain
 2. Navigate to **Domain / Proxy Setup**
 3. For each service add an entry:
    - **Source:** subdomain (e.g. `photos`)
