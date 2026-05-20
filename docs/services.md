@@ -5,10 +5,6 @@
 - Data: ~/immich/Photos/, ~/immich/postgres/
 - Logs: ~/.supervisor/logs/immich.*
 
-## Jellyfin (Media Server)
-**Type:** Native binary | **Port:** 8096 | **Config:** ~/.config/jellyfin/
-- Logs: ~/.supervisor/logs/jellyfin.*
-
 ## Copyparty (File Sharing)
 **Type:** Python venv | **Port:** 19720 | **Config:** ~/copyparty/copyparty.conf
 - Data: ~/files/
@@ -19,20 +15,21 @@
 - Data: ~/radicale/collections/
 - Logs: ~/.supervisor/logs/radicale.*
 
-## Deluge (Torrent Client)
-**Type:** Native | **Ports:** 58846 (RPC), 8112 (web)
-- Config: ~/.config/deluge/ | Watch: ~/watch/
-- Logs: ~/.supervisor/logs/deluge*
-
 ## Tiny-Stats (Dashboard)
 **Type:** Node.js | **Port:** 7828 | **Path:** ~/tiny-stats/
 
 ## Cloudflare Tunnel
 **Type:** Go binary | **Binary:** ~/cloudflared | **Token:** Ansible Vault
 
+## Whatbox-Managed (not in IaC)
+- Jellyfin (8096) — pre-installed by Whatbox
+- Deluge + WebUI (8112) — pre-installed by Whatbox
+- Helm file browser — pre-installed by Whatbox
+- Prowlarr (28146) — pre-installed by Whatbox (not in use)
+
 ## Supervisor
 - Config: ~/.config/supervisord/supervisord.conf
 - Service defs: ~/.config/supervisord/conf.d/*.ini
 - Commands:
-  - `supervisorctl status` - Show all services
-  - `supervisorctl restart <service>` - Restart a service
+  - `supervisorctl status` — Show all services
+  - `supervisorctl restart <service>` — Restart a service

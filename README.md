@@ -7,13 +7,16 @@ Gentoo Linux with user-scoped services.
 
 | Service | Port | Type | Config |
 |---|---|---|---|
-| [Immich](https://immich.app) | 2283 | Docker (podman-compose) | `ansible/files/immich/` |
-| [Jellyfin](https://jellyfin.org) | 8096 | Native binary | supervisord managed |
+| **Your services (IaC-managed)** | | | |
+| [Immich](https://immich.app) | 2283 | podman-compose | `ansible/files/immich/` |
 | [Copyparty](https://github.com/9001/copyparty) | 19720 | Python (venv) | `ansible/templates/copyparty/` |
 | [Radicale](https://radicale.org) | 5232 | Python (venv) | `ansible/templates/radicale/` |
-| [Deluge](https://deluge-torrent.org) | 8112 | Native | supervisord managed |
 | Tiny-Stats | 7828 | Node.js | supervisord managed |
 | Cloudflare Tunnel | — | Go binary | supervisord managed |
+| **Whatbox-managed (pre-installed)** | | | |
+| Jellyfin | 8096 | Native | via Whatbox panel |
+| Deluge + WebUI | 8112 | Native | via Whatbox panel |
+| Helm file browser | — | Native | via Whatbox panel |
 
 ## Architecture
 

@@ -4,11 +4,6 @@ services:
     type: podman-compose
     path: "{{ user_home }}/immich"
     supervisor_program: immich
-  jellyfin:
-    enabled: true
-    type: native
-    binary: /usr/bin/jellyfin
-    supervisor_program: jellyfin
   copyparty:
     enabled: true
     type: python-venv
@@ -19,21 +14,12 @@ services:
     type: python-venv
     path: "{{ user_home }}/radicale"
     supervisor_program: radicale
-  deluge:
-    enabled: true
-    type: native
-    binary: /usr/bin/deluged
-    supervisor_program: deluged
-  deluge-web:
-    enabled: true
-    type: native
-    binary: /usr/bin/deluge-web
-    supervisor_program: deluge-web
   tiny-stats:
     enabled: true
     type: node
     path: "{{ user_home }}/tiny-stats"
     supervisor_program: tiny-stats
+    entrypoint: server.js
   cloudflared:
     enabled: true
     type: binary

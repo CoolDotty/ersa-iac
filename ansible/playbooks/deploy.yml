@@ -56,14 +56,6 @@
       when: services.immich.enabled
       notify: reload supervisord
 
-    - name: Deploy Jellyfin supervisor config
-      template:
-        src: ../files/supervisord/conf.d/jellyfin.ini
-        dest: "{{ user_home }}/.config/supervisord/conf.d/jellyfin.ini"
-        mode: 0600
-      when: services.jellyfin.enabled
-      notify: reload supervisord
-
     - name: Deploy Copyparty config
       template:
         src: ../templates/copyparty/copyparty.conf.j2
@@ -94,22 +86,6 @@
         dest: "{{ user_home }}/.config/supervisord/conf.d/radicale.ini"
         mode: 0600
       when: services.radicale.enabled
-      notify: reload supervisord
-
-    - name: Deploy Deluge supervisor config
-      template:
-        src: ../files/supervisord/conf.d/deluged.ini
-        dest: "{{ user_home }}/.config/supervisord/conf.d/deluged.ini"
-        mode: 0600
-      when: services.deluge.enabled
-      notify: reload supervisord
-
-    - name: Deploy Deluge-web supervisor config
-      template:
-        src: ../files/supervisord/conf.d/deluge-web.ini
-        dest: "{{ user_home }}/.config/supervisord/conf.d/deluge-web.ini"
-        mode: 0600
-      when: services.deluge-web.enabled
       notify: reload supervisord
 
     - name: Deploy Tiny-Stats supervisor config

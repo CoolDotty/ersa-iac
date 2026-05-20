@@ -31,7 +31,6 @@
         - "{{ user_home }}/files"
         - "{{ user_home }}/watch"
         - "{{ user_home }}/deluge-watch"
-        - "{{ user_home }}/.config/deluge"
 
     - name: Ensure cloudflared is executable
       file:
