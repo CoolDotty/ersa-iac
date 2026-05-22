@@ -30,6 +30,17 @@
 | Logs | `~/.supervisor/logs/radicale.*` |
 | Restart | `supervisorctl restart radicale` |
 
+## n8n (Workflow Automation)
+| | |
+|---|---|
+| Type | podman-compose |
+| Port | 5678 |
+| Config | `~/n8n/` |
+| Data | `~/n8n/.n8n/` (SQLite DB + encryption key), `~/n8n/local-files/` |
+| Logs | `~/.supervisor/logs/n8n.*` |
+| Restart | `supervisorctl restart n8n` |
+| Git Backup | Workflows + credentials auto-backup to private GitHub repo |
+
 ## Tiny-Stats (Dashboard)
 | | |
 |---|---|

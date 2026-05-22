@@ -12,6 +12,7 @@ all:
       deluge_web_port: 8112
       tiny_stats_port: 7828
       jellyfin_port: 8096
+      domain: x3c.ca
       user_home: /home/dotanarchy
       supervisor_venv: "{{ user_home }}/.supervisor"
       supervisor_config: "{{ user_home }}/.config/supervisord/supervisord.conf"

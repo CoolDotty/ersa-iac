@@ -4,3 +4,4 @@ services:
   copyparty: { enabled: true, supervisor_program: copyparty }
   radicale: { enabled: true, supervisor_program: radicale }
   tiny-stats: { enabled: true, supervisor_program: tiny-stats }
+  n8n: { enabled: true, supervisor_program: n8n }

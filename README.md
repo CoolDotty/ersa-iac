@@ -12,6 +12,7 @@ Gentoo Linux with user-scoped services.
 | [Copyparty](https://github.com/9001/copyparty) | 19720 | Python (venv) | service config lives on VPS |
 | [Radicale](https://radicale.org) | 5232 | Python (venv) | service config lives on VPS |
 | Tiny-Stats | 7828 | Node.js | service config lives on VPS |
+| [n8n](https://n8n.io) | 5678 | podman-compose | `ansible/files/n8n/` |
 | **Whatbox-managed (pre-installed)** | | | |
 | Jellyfin | 8096 | Native | via Whatbox CP panel |
 | Deluge + WebUI | 8112 | Native | via Whatbox CP panel |
@@ -26,10 +27,10 @@ Gentoo Linux with user-scoped services.
    user@ersa.whatbox.ca
    ┌──────────────────────┐
    │     supervisord       │
-   │  ┌──────┬──────┬────┐ │
-   │  │immich│python│node│ │
-   │  │compose│ venvs │ js │ │
-   │  └──────┴──────┴────┘ │
+   │  ┌────────┬────────┬──────┬──────┐ │
+   │  │ immich │  n8n   │python│ node │ │
+   │  │ compose│ compose│ venvs │  js  │ │
+   │  └────────┴────────┴──────┴──────┘ │
    └──────────────────────┘
 ```
 
@@ -63,8 +64,9 @@ Your data stays on the VPS — never in Git:
 
 | In Git (Config) | On VPS (Data) |
 |---|---|
-| `docker-compose.yml` | `~/immich/Photos/` |
+| `docker-compose.yml` (n8n, Immich) | `~/immich/Photos/` |
 | Supervisor `.ini` files | `~/immich/postgres/` |
+| `.env` template (n8n) | `~/n8n/.n8n/` (SQLite DB + encryption key) |
 | | `~/files/` |
 | | All 11TB+ mpath drives |
 

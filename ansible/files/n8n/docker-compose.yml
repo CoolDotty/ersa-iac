@@ -1,0 +1,15 @@
+name: n8n
+
+services:
+  n8n:
+    container_name: n8n
+    image: docker.io/n8nio/n8n:stable
+    ports:
+      - '127.0.0.1:5678:5678'
+    volumes:
+      - /home/dotanarchy/n8n/.n8n:/root/.n8n
+      - /home/dotanarchy/n8n/local-files:/files
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    restart: unless-stopped

@@ -12,6 +12,7 @@ via their control panel at [whatbox.ca/manage/domain](https://whatbox.ca/manage/
 | [Copyparty](https://github.com/9001/copyparty) | `files` | `127.0.0.1:19720` | On |
 | [Radicale](https://radicale.org) | `cal` | `127.0.0.1:5232` | Off |
 | [Tiny-Stats](https://github.com/dot/) | `stats` | `127.0.0.1:7828` | On |
+| [n8n](https://n8n.io) | `n8n` | `127.0.0.1:5678` | On |
 | Jellyfin | *(whatbox-managed)* | `127.0.0.1:8096` | On |
 | Deluge | *(whatbox-managed)* | `127.0.0.1:8112` | Off |
 
@@ -21,6 +22,8 @@ via their control panel at [whatbox.ca/manage/domain](https://whatbox.ca/manage/
 
 **Tiny-Stats** uses a WebSocket server to push live CPU/RAM/disk charts to
 the dashboard — without it the page loads but stays blank.
+
+**n8n** uses WebSockets for live workflow execution updates and UI notifications.
 
 ## Whatbox CP Setup
 
@@ -51,4 +54,5 @@ photos.yourdomain.com → <target from Whatbox panel>
 files.yourdomain.com  → <target from Whatbox panel>
 cal.yourdomain.com    → <target from Whatbox panel>
 stats.yourdomain.com  → <target from Whatbox panel>
+n8n.yourdomain.com    → <target from Whatbox panel>
 ```

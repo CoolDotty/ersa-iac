@@ -29,6 +29,7 @@
       loop:
         - "{{ user_home }}/immich"
         - "{{ user_home }}/files"
+        - "{{ user_home }}/n8n"
 
     - name: Report next steps
       debug:
