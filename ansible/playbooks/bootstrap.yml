@@ -30,6 +30,8 @@
         - "{{ user_home }}/immich"
         - "{{ user_home }}/files"
         - "{{ user_home }}/n8n"
+        - "{{ user_home }}/affine"
+        - "{{ user_home }}/forgejo"
 
     - name: Report next steps
       debug:

@@ -13,6 +13,8 @@ Gentoo Linux with user-scoped services.
 | [Radicale](https://radicale.org) | 5232 | Python (venv) | service config lives on VPS |
 | Tiny-Stats | 7828 | Node.js | service config lives on VPS |
 | [n8n](https://n8n.io) | 5678 | podman-compose | `ansible/files/n8n/` |
+| [AFFiNE](https://affine.pro) | 3010 | podman-compose | `ansible/files/affine/` |
+| [Forgejo](https://forgejo.org) | 3100 | podman-compose | `ansible/files/forgejo/` |
 | **Whatbox-managed (pre-installed)** | | | |
 | Jellyfin | 8096 | Native | via Whatbox CP panel |
 | Deluge + WebUI | 8112 | Native | via Whatbox CP panel |
@@ -25,13 +27,13 @@ Gentoo Linux with user-scoped services.
    (configured via CP panel)
             │
    user@ersa.whatbox.ca
-   ┌──────────────────────┐
-   │     supervisord       │
-   │  ┌────────┬────────┬──────┬──────┐ │
-   │  │ immich │  n8n   │python│ node │ │
-   │  │ compose│ compose│ venvs │  js  │ │
-   │  └────────┴────────┴──────┴──────┘ │
-   └──────────────────────┘
+   ┌──────────────────────────────────────┐
+   │            supervisord                 │
+   │  ┌────────┬────────┬──────┬────────┬──────┬─────┐ │
+   │  │ immich │  n8n   │affine│ forgejo│python│ node│ │
+   │  │ compose│ compose│compose│ compose│venvs │  js │ │
+   │  └────────┴────────┴──────┴────────┴──────┴─────┘ │
+   └──────────────────────────────────────┘
 ```
 
 ## Usage
@@ -67,6 +69,7 @@ Your data stays on the VPS — never in Git:
 | `docker-compose.yml` (n8n, Immich) | `~/immich/Photos/` |
 | Supervisor `.ini` files | `~/immich/postgres/` |
 | `.env` template (n8n) | `~/n8n/.n8n/` (SQLite DB + encryption key) |
+| `docker-compose.yml` (Forgejo) | `~/forgejo/data/` (repos, SQLite DB, config) |
 | | `~/files/` |
 | | All 11TB+ mpath drives |
 

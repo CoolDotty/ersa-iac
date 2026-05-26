@@ -13,6 +13,8 @@ via their control panel at [whatbox.ca/manage/domain](https://whatbox.ca/manage/
 | [Radicale](https://radicale.org) | `cal` | `127.0.0.1:5232` | Off |
 | [Tiny-Stats](https://github.com/dot/) | `stats` | `127.0.0.1:7828` | On |
 | [n8n](https://n8n.io) | `n8n` | `127.0.0.1:5678` | On |
+| [AFFiNE](https://affine.pro) | `notes` | `127.0.0.1:3010` | On |
+| [Forgejo](https://forgejo.org) | `git` | `127.0.0.1:3100` | On |
 | Jellyfin | *(whatbox-managed)* | `127.0.0.1:8096` | On |
 | Deluge | *(whatbox-managed)* | `127.0.0.1:8112` | Off |
 
@@ -25,6 +27,10 @@ the dashboard — without it the page loads but stays blank.
 
 **n8n** uses WebSockets for live workflow execution updates and UI notifications.
 
+**AFFiNE** uses WebSockets for real-time collaboration and sync.
+
+**Forgejo** uses WebSockets for live git operation notifications and UI updates.
+
 ## Whatbox CP Setup
 
 1. Log into https://whatbox.ca/manage/domain
@@ -33,7 +39,7 @@ the dashboard — without it the page loads but stays blank.
    - **Source:** subdomain (e.g. `photos`)
    - **Target:** `127.0.0.1:<port>`
    - **Type:** HTTP proxy
-   - **WebSockets:** toggle on for Immich, Copyparty, and Tiny-Stats
+   - **WebSockets:** toggle on for Immich, Copyparty, Tiny-Stats, n8n, AFFiNE, and Forgejo
 
 ## DNS
 
@@ -55,4 +61,7 @@ files.yourdomain.com  → <target from Whatbox panel>
 cal.yourdomain.com    → <target from Whatbox panel>
 stats.yourdomain.com  → <target from Whatbox panel>
 n8n.yourdomain.com    → <target from Whatbox panel>
+notes.yourdomain.com   → <target from Whatbox panel>
+git.yourdomain.com     → <target from Whatbox panel>
+git.yourdomain.com    → <target from Whatbox panel>
 ```

@@ -30,6 +30,17 @@
 | Logs | `~/.supervisor/logs/radicale.*` |
 | Restart | `supervisorctl restart radicale` |
 
+## AFFiNE (Notes & Knowledge Base)
+| | |
+|---|---|
+| Type | podman-compose |
+| Port | 3010 |
+| URL | `https://notes.x3c.ca` |
+| Config | `~/affine/` |
+| Data | `~/affine/postgres/`, `~/affine/storage/`, `~/affine/config/` |
+| Logs | `~/.supervisor/logs/affine.*` |
+| Restart | `supervisorctl restart affine` |
+
 ## n8n (Workflow Automation)
 | | |
 |---|---|
@@ -40,6 +51,17 @@
 | Logs | `~/.supervisor/logs/n8n.*` |
 | Restart | `supervisorctl restart n8n` |
 | Git Backup | Workflows + credentials auto-backup to private GitHub repo |
+
+## Forgejo (Git Hosting)
+| | |
+|---|---|
+| Type | podman-compose |
+| Port | 3100 |
+| URL | `https://git.x3c.ca` |
+| Config | `~/forgejo/` |
+| Data | `~/forgejo/data/` (repos, SQLite DB, config, attachments) |
+| Logs | `~/.supervisor/logs/forgejo.*` |
+| Restart | `supervisorctl restart forgejo` |
 
 ## Tiny-Stats (Dashboard)
 | | |
