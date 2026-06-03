@@ -152,6 +152,7 @@
         - "{{ user_home }}/forgejo/data/gitea"
         - "{{ user_home }}/forgejo/data/gitea/conf"
       when: services.forgejo.enabled
+      ignore_errors: true
 
     - name: Deploy Forgejo docker-compose.yml
       copy:
@@ -216,6 +217,76 @@
       when: services["tiny-stats"].enabled
       notify: reload supervisord
 
+    - name: Clone or update qbwc-bridge repo
+      git:
+        repo: https://github.com/CoolDotty/qbwc-to-n8n-bridge.git
+        dest: "{{ user_home }}/qbwc-bridge"
+        version: main
+        force: yes
+      when: services.qbwc_bridge.enabled
+
+    - name: Create qbwc-bridge postgres directory
+      file:
+        path: "{{ user_home }}/qbwc-bridge/postgres"
+        state: directory
+        mode: 0700
+      when: services.qbwc_bridge.enabled
+
+    - name: Deploy qbwc-bridge docker-compose.yml
+      copy:
+        src: ../files/qbwc-bridge/docker-compose.yml
+        dest: "{{ user_home }}/qbwc-bridge/docker-compose.yml"
+        mode: 0600
+        force: yes
+      when: services.qbwc_bridge.enabled
+      notify: restart qbwc-bridge
+
+    - name: Check if qbwc-bridge .env exists
+      stat:
+        path: "{{ user_home }}/qbwc-bridge/.env"
+      register: qbwc_env_stat
+      when: services.qbwc_bridge.enabled
+
+    - name: Generate qbwc-bridge .env with Python secrets
+      shell: |
+        python3 -c "
+        import secrets
+        db_pass = secrets.token_urlsafe(32)
+        session_secret = secrets.token_urlsafe(32)
+        n8n_secret = secrets.token_urlsafe(32)
+        admin_api_key = secrets.token_urlsafe(32)
+        with open('{{ user_home }}/qbwc-bridge/.env', 'w') as f:
+            f.write('NODE_ENV=production\n')
+            f.write('PORT=7292\n')
+            f.write('PUBLIC_URL=https://qbwc.{{ domain }}\n')
+            f.write(f'DATABASE_URL=postgres://qbwc:{db_pass}@db:5432/qbwc_bridge\n')
+            f.write('N8N_WEBHOOK_URL=https://n8n.{{ domain }}/webhook/qbwc-events\n')
+            f.write(f'N8N_WEBHOOK_SECRET={n8n_secret}\n')
+            f.write(f'SESSION_SECRET={session_secret}\n')
+            f.write(f'ADMIN_API_KEY={admin_api_key}\n')
+            f.write(f'DB_PASSWORD={db_pass}\n')
+            f.write('READ_ONLY=true\n')
+            f.write('RATE_LIMIT_WINDOW_MS=900000\n')
+            f.write('RATE_LIMIT_MAX=100\n')
+            f.write('MAX_BODY_SIZE=1mb\n')
+            f.write('LOG_LEVEL=info\n')
+        "
+      when: services.qbwc_bridge.enabled and not qbwc_env_stat.stat.exists
+
+    - name: Build qbwc-bridge image
+      shell: |
+        cd {{ user_home }}/qbwc-bridge && podman-compose build 2>&1
+      when: services.qbwc_bridge.enabled
+      changed_when: false
+
+    - name: Deploy qbwc-bridge supervisor config
+      template:
+        src: ../files/supervisord/conf.d/qbwc-bridge.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/qbwc-bridge.ini"
+        mode: 0600
+      when: services.qbwc_bridge.enabled
+      notify: reload supervisord
+
     - name: Supervisor starts on reboot via cron
       cron:
         name: start_supervisord
@@ -277,6 +348,14 @@
         podman-compose down && podman-compose up -d
         {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start forgejo
       listen: "restart forgejo"
+
+    - name: restart qbwc-bridge
+      shell: |
+        cd {{ user_home }}/qbwc-bridge
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} stop qbwc-bridge
+        podman-compose down && podman-compose up --build -d
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start qbwc-bridge
+      listen: "restart qbwc-bridge"
 
     - name: restart copyparty
       command: "{{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} restart copyparty"

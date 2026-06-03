@@ -1,0 +1,33 @@
+name: qbwc-bridge
+
+services:
+  db:
+    container_name: qbwc-bridge-db
+    image: docker.io/postgres:16-alpine
+    environment:
+      POSTGRES_USER: qbwc
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: qbwc_bridge
+    volumes:
+      - /home/dotanarchy/qbwc-bridge/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qbwc -d qbwc_bridge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  bridge:
+    container_name: qbwc-bridge
+    build: .
+    env_file:
+      - .env
+    ports:
+      - '127.0.0.1:7292:7292'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - db
+    command: >
+      sh -c "npm run db:migrate && node dist/app.js"
+    restart: unless-stopped

@@ -16,6 +16,7 @@ The root domain `x3c.ca` is hosted on GitHub Pages from
 | [Radicale](https://radicale.org) | 5232 | Python (venv) | service config lives on VPS |
 | Tiny-Stats | 7828 | Node.js | service config lives on VPS |
 | [n8n](https://n8n.io) | 5678 | podman-compose | `ansible/files/n8n/` |
+| [QBWC Bridge](https://github.com/CoolDotty/qbwc-to-n8n-bridge) | 7292 | podman-compose | `ansible/files/qbwc-bridge/` |
 | [AFFiNE](https://affine.pro) | 3010 | podman-compose | `ansible/files/affine/` |
 | [Forgejo](https://forgejo.org) | 3100 | podman-compose | `ansible/files/forgejo/` |
 | **Whatbox-managed (pre-installed)** | | | |

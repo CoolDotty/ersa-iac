@@ -32,6 +32,7 @@
         - "{{ user_home }}/n8n"
         - "{{ user_home }}/affine"
         - "{{ user_home }}/forgejo"
+        - "{{ user_home }}/qbwc-bridge"
 
     - name: Report next steps
       debug:

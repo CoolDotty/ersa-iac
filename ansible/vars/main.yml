@@ -5,5 +5,6 @@ services:
   radicale: { enabled: true, supervisor_program: radicale }
   tiny-stats: { enabled: true, supervisor_program: tiny-stats }
   n8n: { enabled: true, supervisor_program: n8n }
+  qbwc_bridge: { enabled: true, supervisor_program: qbwc-bridge }
   affine: { enabled: true, supervisor_program: affine }
   forgejo: { enabled: true, supervisor_program: forgejo }
