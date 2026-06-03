@@ -3,6 +3,9 @@
 Infrastructure as Code for `ersa.whatbox.ca` — a Whatbox seedbox VPS running
 Gentoo Linux with user-scoped services.
 
+The root domain `x3c.ca` is hosted on GitHub Pages from
+[`CoolDotty/x3c.ca`](https://github.com/CoolDotty/x3c.ca).
+
 ## Services
 
 | Service | Port | Type | Config |
