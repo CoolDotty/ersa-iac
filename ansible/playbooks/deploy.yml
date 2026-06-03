@@ -266,8 +266,10 @@
             f.write(f'ADMIN_API_KEY={admin_api_key}\n')
             f.write(f'DB_PASSWORD={db_pass}\n')
             f.write('READ_ONLY=true\n')
+            f.write('TRUST_PROXY=1\n')
             f.write('RATE_LIMIT_WINDOW_MS=900000\n')
             f.write('RATE_LIMIT_MAX=100\n')
+            f.write('ADMIN_RATE_LIMIT_MAX=30\n')
             f.write('MAX_BODY_SIZE=1mb\n')
             f.write('LOG_LEVEL=info\n')
         "
