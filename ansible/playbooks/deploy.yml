@@ -253,15 +253,26 @@
         import secrets
         db_pass = secrets.token_urlsafe(32)
         session_secret = secrets.token_urlsafe(32)
-        n8n_secret = secrets.token_urlsafe(32)
         admin_api_key = secrets.token_urlsafe(32)
+        # The N8N webhook URL is the only piece of secret-ish config the
+        # operator must supply after creating the n8n workflow. The UUID
+        # path n8n generates is the auth. The URL is loaded from
+        # {{ n8n_webhook_url_file }} (default: ~/qbwc-bridge/n8n-webhook-url)
+        # if present, otherwise it's left empty and the bridge will just
+        # log and skip deliveries until the file is populated.
+        n8n_url = ''
+        try:
+            with open('{{ user_home }}/qbwc-bridge/n8n-webhook-url') as f:
+                n8n_url = f.read().strip()
+        except FileNotFoundError:
+            pass
         with open('{{ user_home }}/qbwc-bridge/.env', 'w') as f:
             f.write('NODE_ENV=production\n')
             f.write('PORT=7292\n')
             f.write('PUBLIC_URL=https://qbwc.{{ domain }}\n')
             f.write(f'DATABASE_URL=postgres://qbwc:{db_pass}@db:5432/qbwc_bridge\n')
-            f.write('N8N_WEBHOOK_URL=https://n8n.{{ domain }}/webhook/qbwc-events\n')
-            f.write(f'N8N_WEBHOOK_SECRET={n8n_secret}\n')
+            if n8n_url:
+                f.write(f'N8N_WEBHOOK_URL={n8n_url}\n')
             f.write(f'SESSION_SECRET={session_secret}\n')
             f.write(f'ADMIN_API_KEY={admin_api_key}\n')
             f.write(f'DB_PASSWORD={db_pass}\n')
