@@ -1,0 +1,8 @@
+{
+  "name": "n8n-custom-extensions",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+  }
+}

@@ -13,7 +13,6 @@ via their control panel at [whatbox.ca/manage/domain](https://whatbox.ca/manage/
 | [Radicale](https://radicale.org) | `cal` | `127.0.0.1:5232` | Off |
 | [Tiny-Stats](https://github.com/dot/) | `stats` | `127.0.0.1:7828` | On |
 | [n8n](https://n8n.io) | `n8n` | `127.0.0.1:5678` | On |
-| [QBWC Bridge](https://github.com/CoolDotty/qbwc-to-n8n-bridge) | `qbwc` | `127.0.0.1:7292` | Off |
 | [AFFiNE](https://affine.pro) | `notes` | `127.0.0.1:3010` | On |
 | [Forgejo](https://forgejo.org) | `git` | `127.0.0.1:3100` | On |
 | Jellyfin | *(whatbox-managed)* | `127.0.0.1:8096` | On |

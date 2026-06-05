@@ -16,7 +16,6 @@ all:
       user_home: /home/dotanarchy
       affine_port: 3010
       forgejo_port: 3100
-      qbwc_port: 7292
       affine_db_password: SBQslgtnnHIUl7a6mXkRYZn2
       supervisor_venv: "{{ user_home }}/.supervisor"
       supervisor_config: "{{ user_home }}/.config/supervisord/supervisord.conf"
