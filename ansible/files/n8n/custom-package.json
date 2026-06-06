@@ -4,6 +4,6 @@
   "private": true,
   "type": "commonjs",
   "dependencies": {
-    "n8n-nodes-quickbooks-web-connector": "github:CoolDotty/n8n-QuickBooks-Web-Connect#d2d8326b2be6487c9d205c354e65f653866748d4"
+    "n8n-nodes-quickbooks-web-connector": "github:CoolDotty/n8n-QuickBooks-Web-Connect#e5e74ba315952b9b94d2d49945dc6daa3c8a016c"
   }
 }
