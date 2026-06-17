@@ -236,6 +236,12 @@
         if grep -q 'CHANGE_ME_MEILI_MASTER_KEY' .env 2>/dev/null; then
           sed -i "s/CHANGE_ME_MEILI_MASTER_KEY/$(openssl rand -base64 36 | tr -dc 'A-Za-z0-9')/" .env
         fi
+        if grep -q 'CHANGE_ME_OPENAI_API_KEY' .env 2>/dev/null; then
+          sed -i 's/^OPENAI_BASE_URL=/#OPENAI_BASE_URL=/' .env
+          sed -i 's/^OPENAI_API_KEY=/#OPENAI_API_KEY=/' .env
+          sed -i 's/^INFERENCE_TEXT_MODEL=/#INFERENCE_TEXT_MODEL=/' .env
+          sed -i 's/^INFERENCE_IMAGE_MODEL=/#INFERENCE_IMAGE_MODEL=/' .env
+        fi
       when: services.karakeep.enabled
       changed_when: false
 
