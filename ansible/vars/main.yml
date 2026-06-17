@@ -7,3 +7,4 @@ services:
   n8n: { enabled: true, supervisor_program: n8n }
   affine: { enabled: true, supervisor_program: affine }
   forgejo: { enabled: true, supervisor_program: forgejo }
+  karakeep: { enabled: true, supervisor_program: karakeep }

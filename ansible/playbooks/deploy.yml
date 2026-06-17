@@ -200,6 +200,59 @@
       when: services.forgejo.enabled
       notify: reload supervisord
 
+    - name: Create Karakeep directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0700
+      loop:
+        - "{{ user_home }}/karakeep"
+        - "{{ user_home }}/karakeep/data"
+        - "{{ user_home }}/karakeep/meilisearch"
+      when: services.karakeep.enabled
+
+    - name: Deploy Karakeep docker-compose.yml
+      copy:
+        src: ../files/karakeep/docker-compose.yml
+        dest: "{{ user_home }}/karakeep/docker-compose.yml"
+        mode: 0600
+      when: services.karakeep.enabled
+      notify: restart karakeep
+
+    - name: Deploy Karakeep .env (first time only)
+      copy:
+        src: ../files/karakeep/.env
+        dest: "{{ user_home }}/karakeep/.env"
+        mode: 0600
+        force: no
+      when: services.karakeep.enabled
+
+    - name: Generate Karakeep secrets if missing
+      shell: |
+        cd {{ user_home }}/karakeep
+        if grep -q 'CHANGE_ME_NEXTAUTH_SECRET' .env 2>/dev/null; then
+          sed -i "s/CHANGE_ME_NEXTAUTH_SECRET/$(openssl rand -base64 36)/" .env
+        fi
+        if grep -q 'CHANGE_ME_MEILI_MASTER_KEY' .env 2>/dev/null; then
+          sed -i "s/CHANGE_ME_MEILI_MASTER_KEY/$(openssl rand -base64 36 | tr -dc 'A-Za-z0-9')/" .env
+        fi
+      when: services.karakeep.enabled
+      changed_when: false
+
+    - name: Pull latest Karakeep images
+      shell: |
+        cd {{ user_home }}/karakeep && podman-compose pull 2>&1
+      when: services.karakeep.enabled
+      changed_when: false
+
+    - name: Deploy Karakeep supervisor config
+      template:
+        src: ../files/supervisord/conf.d/karakeep.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/karakeep.ini"
+        mode: 0600
+      when: services.karakeep.enabled
+      notify: reload supervisord
+
     - name: Update Copyparty to latest version
       shell: |
         cd {{ user_home }}/copyparty
@@ -298,6 +351,14 @@
         podman-compose down && podman-compose up -d
         {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start forgejo
       listen: "restart forgejo"
+
+    - name: restart karakeep
+      shell: |
+        cd {{ user_home }}/karakeep
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} stop karakeep
+        podman-compose down && podman-compose up -d
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start karakeep
+      listen: "restart karakeep"
 
     - name: restart copyparty
       command: "{{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} restart copyparty"
