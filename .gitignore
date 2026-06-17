@@ -1,5 +1,6 @@
 # Secrets — these live on the server, not in the repo
 .env
+!ansible/files/karakeep/.env
 *.pem
 *.key
 
