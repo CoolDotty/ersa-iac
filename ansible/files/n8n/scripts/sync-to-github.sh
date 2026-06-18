@@ -17,7 +17,7 @@ CONFIG_FILE="$CONFIG_DIR/config"
 API_KEY_FILE="$CONFIG_DIR/api-key"
 REPO_DIR="$HOME/n8n-workflows"
 WORKFLOWS_DIR="$REPO_DIR/workflows"
-N8N_API="http://127.0.0.1:5678/rest"
+N8N_API="http://127.0.0.1:5678/api/v1"
 
 # ---------- defaults ----------
 EXCLUDE_IDS=""
