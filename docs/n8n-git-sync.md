@@ -41,10 +41,11 @@ echo "<api-key>" | ssh dotanarchy@ersa.whatbox.ca "cat > ~/.n8n-sync/api-key && 
 
 ### 3. Pull-webhook workflow (already created)
 
-The pull-webhook workflow **`n8n Pull Webhook Sync`** already exists at:
-https://n8n.x3c.ca/workflow/FxOmPzb0EmlXS2YI (ID: `FxOmPzb0EmlXS2YI`)
+The pull-webhook workflow **`n8n Pull Webhook Sync`** exists at:
+https://n8n.x3c.ca/workflow/cNyZx8zOIOcEa4WT (ID: `cNyZx8zOIOcEa4WT`)
 
-It has 6 nodes — Webhook → Parse Changed Files → Loop → Fetch from GitHub → Upsert in n8n → Respond.
+It has 5 nodes — Webhook → Parse Changed Files → Loop → Fetch from GitHub → Upsert in n8n.
+The webhook validates `X-Sync-Token` header built-in (no external credential needed).
 
 **Required — set up credentials in the workflow UI:**
 
@@ -65,12 +66,12 @@ It has 6 nodes — Webhook → Parse Changed Files → Loop → Fetch from GitHu
 
 `~/.n8n-sync/config` on the server already has:
 ```ini
-EXCLUDE_IDS="FxOmPzb0EmlXS2YI"
+EXCLUDE_IDS="cNyZx8zOIOcEa4WT"
 ```
 
 `.gitignore` in the repo already has:
 ```
-workflows/FxOmPzb0EmlXS2YI-*.json
+workflows/cNyZx8zOIOcEa4WT-*.json
 ```
 
 ### 5. Set GitHub secrets
