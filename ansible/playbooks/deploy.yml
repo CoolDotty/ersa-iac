@@ -107,6 +107,13 @@
       when: services.n8n.enabled
       notify: restart n8n
 
+    - name: Ensure n8n scripts directory
+      file:
+        path: "{{ user_home }}/n8n/scripts"
+        state: directory
+        mode: 0700
+      when: services.n8n.enabled
+
     - name: Deploy n8n sync-to-github script
       copy:
         src: ../files/n8n/scripts/sync-to-github.sh
