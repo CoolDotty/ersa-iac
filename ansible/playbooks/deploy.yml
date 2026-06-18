@@ -107,6 +107,28 @@
       when: services.n8n.enabled
       notify: restart n8n
 
+    - name: Deploy n8n sync-to-github script
+      copy:
+        src: ../files/n8n/scripts/sync-to-github.sh
+        dest: "{{ user_home }}/n8n/scripts/sync-to-github.sh"
+        mode: 0700
+      when: services.n8n.enabled
+
+    - name: Ensure n8n-sync config directory
+      file:
+        path: "{{ user_home }}/.n8n-sync"
+        state: directory
+        mode: 0700
+      when: services.n8n.enabled
+
+    - name: Schedule n8n sync cron job
+      cron:
+        name: n8n-sync-to-github
+        minute: "*/5"
+        job: "{{ user_home }}/n8n/scripts/sync-to-github.sh > {{ user_home }}/.supervisor/logs/n8n-sync.log 2>&1"
+        state: present
+      when: services.n8n.enabled
+
     - name: Create AFFiNE directories
       file:
         path: "{{ item }}"

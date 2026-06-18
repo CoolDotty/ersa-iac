@@ -50,7 +50,7 @@
 | Data | `~/n8n/.n8n/` (SQLite DB + encryption key), `~/n8n/local-files/` |
 | Logs | `~/.supervisor/logs/n8n.*` |
 | Restart | `supervisorctl restart n8n` |
-| Git Backup | Workflows + credentials auto-backup to private GitHub repo |
+| Git Sync | Two-way with CoolDotty/n8n-workflows — see [n8n-git-sync.md](n8n-git-sync.md) |
 
 ## Forgejo (Git Hosting)
 | | |
