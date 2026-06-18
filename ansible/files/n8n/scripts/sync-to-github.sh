@@ -91,10 +91,14 @@ done
 # ---------- commit & push if changed ----------
 cd "$REPO_DIR"
 
+# set git user for cron context (no global config on Whatbox)
+git config user.email "n8n-sync@x3c.ca"
+git config user.name "n8n Sync"
+
 # pull latest first to avoid conflicts
 git pull --rebase origin main 2>/dev/null || true
 
-if ! git diff --quiet -- 'workflows/*.json'; then
+if [ -n "$(git status --porcelain -- 'workflows/*.json')" ]; then
   git add -A
   git commit -m "sync: n8n workflow update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
   git push origin main 2>&1 || {
