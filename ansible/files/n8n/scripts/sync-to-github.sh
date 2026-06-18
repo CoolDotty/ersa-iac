@@ -9,6 +9,9 @@
 
 set -euo pipefail
 
+# Whatbox sets HOME to a non-standard path; resolve real home dir
+HOME=$(cd ~ && pwd)
+
 CONFIG_DIR="$HOME/.n8n-sync"
 CONFIG_FILE="$CONFIG_DIR/config"
 API_KEY_FILE="$CONFIG_DIR/api-key"

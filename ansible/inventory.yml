@@ -14,6 +14,8 @@ all:
       jellyfin_port: 8096
       domain: x3c.ca
       user_home: /home/dotanarchy
+      # Note: $HOME at runtime is /home/dot on this Whatbox host,
+      # but ~/ resolves to /home/dotanarchy. The sync script handles this.
       affine_port: 3010
       forgejo_port: 3100
       karakeep_port: 5272
