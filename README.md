@@ -16,8 +16,6 @@ The root domain `x3c.ca` is hosted on GitHub Pages from
 | [Radicale](https://radicale.org) | 5232 | Python (venv) | service config lives on VPS |
 | Tiny-Stats | 7828 | Node.js | service config lives on VPS |
 | [n8n](https://n8n.io) | 5678 | podman-compose | `ansible/files/n8n/` |
-| [AFFiNE](https://affine.pro) | 3010 | podman-compose | `ansible/files/affine/` |
-| [Forgejo](https://forgejo.org) | 3100 | podman-compose | `ansible/files/forgejo/` |
 | [Karakeep](https://karakeep.app) | 5272 | podman-compose | `ansible/files/karakeep/` |
 | **Whatbox-managed (pre-installed)** | | | |
 | Jellyfin | 8096 | Native | via Whatbox CP panel |
@@ -33,10 +31,10 @@ The root domain `x3c.ca` is hosted on GitHub Pages from
    user@ersa.whatbox.ca
    ┌──────────────────────────────────────┐
    │            supervisord                 │
-   │  ┌────────┬────────┬──────┬────────┬────────┬──────┬─────┐ │
-   │  │ immich │  n8n   │affine│ forgejo│karakeep│python│ node│ │
-   │  │ compose│ compose│compose│ compose│compose │venvs │  js │ │
-   │  └────────┴────────┴──────┴────────┴────────┴──────┴─────┘ │
+   │  ┌────────┬────────┬────────┬──────┬─────┐ │
+   │  │ immich │  n8n   │karakeep│python│ node│ │
+   │  │ compose│ compose│compose │venvs │  js │ │
+   │  └────────┴────────┴────────┴──────┴─────┘ │
    └──────────────────────────────────────┘
 ```
 
@@ -73,7 +71,6 @@ Your data stays on the VPS — never in Git:
 | `docker-compose.yml` (n8n, Immich) | `~/immich/Photos/` |
 | Supervisor `.ini` files | `~/immich/postgres/` |
 | `.env` template (n8n) | `~/n8n/.n8n/` (SQLite DB + encryption key) |
-| `docker-compose.yml` (Forgejo) | `~/forgejo/data/` (repos, SQLite DB, config) |
 | | `~/files/` |
 | | All 11TB+ mpath drives |
 

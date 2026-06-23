@@ -5,6 +5,7 @@ services:
     image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
     container_name: karakeep_web
     restart: unless-stopped
+    cpus: "2"
     ports:
       - '127.0.0.1:${KARAKEEP_PORT:-5272}:3000'
     volumes:
@@ -15,6 +16,13 @@ services:
       MEILI_ADDR: http://meilisearch:7700
       BROWSER_WEB_URL: http://chrome:9222
       DATA_DIR: /data
+      CRAWLER_NUM_WORKERS: "1"
+      INFERENCE_NUM_WORKERS: "1"
+      SEARCH_NUM_WORKERS: "1"
+      ASSET_PREPROCESSING_NUM_WORKERS: "1"
+      WEBHOOK_NUM_WORKERS: "1"
+      RULE_ENGINE_NUM_WORKERS: "1"
+      UV_THREADPOOL_SIZE: "4"
 
   chrome:
     image: gcr.io/zenika-hub/alpine-chrome:124
@@ -32,9 +40,12 @@ services:
     image: getmeili/meilisearch:v1.41.0
     container_name: karakeep_meilisearch
     restart: unless-stopped
+    cpus: "2"
     env_file:
       - .env
     environment:
       MEILI_NO_ANALYTICS: "true"
+      MEILI_MAX_INDEXING_THREADS: "2"
+      MEILI_EXPERIMENTAL_NB_SEARCHES_PER_CORE: "1"
     volumes:
       - ./meilisearch:/meili_data
