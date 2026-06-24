@@ -6,3 +6,4 @@ services:
   tiny-stats: { enabled: true, supervisor_program: tiny-stats }
   n8n: { enabled: true, supervisor_program: n8n }
   karakeep: { enabled: true, supervisor_program: karakeep }
+  gatus: { enabled: true, supervisor_program: gatus }

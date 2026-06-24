@@ -1,0 +1,88 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+web:
+  address: 127.0.0.1
+  port: 19840
+
+ui:
+  title: x3c status
+  header: x3c status
+
+alerting:
+  discord:
+    webhook-url: "${DISCORD_WEBHOOK_URL}"
+    title: "x3c smoke test"
+    default-alert:
+      description: "health check failed"
+      failure-threshold: 3
+      success-threshold: 2
+      send-on-resolved: true
+
+endpoints:
+  - name: photos
+    group: services
+    url: "https://photos.x3c.ca/"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+      - "[RESPONSE_TIME] < 5000"
+    alerts:
+      - type: discord
+
+  - name: keep
+    group: services
+    url: "https://keep.x3c.ca/"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+      - "[RESPONSE_TIME] < 5000"
+    alerts:
+      - type: discord
+
+  - name: n8n
+    group: services
+    url: "https://n8n.x3c.ca/"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+      - "[RESPONSE_TIME] < 5000"
+    alerts:
+      - type: discord
+
+  - name: files
+    group: services
+    url: "https://files.x3c.ca/"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+      - "[RESPONSE_TIME] < 5000"
+    alerts:
+      - type: discord
+
+  - name: calendar
+    group: services
+    url: "https://cal.x3c.ca/"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+      - "[RESPONSE_TIME] < 5000"
+    alerts:
+      - type: discord
+
+  - name: stats
+    group: services
+    url: "https://stats.x3c.ca/"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+      - "[RESPONSE_TIME] < 5000"
+    alerts:
+      - type: discord

@@ -46,6 +46,15 @@
       when: services.immich.enabled
       notify: restart immich
 
+    - name: Pin Immich version in server env
+      lineinfile:
+        path: "{{ user_home }}/immich/.env"
+        regexp: '^IMMICH_VERSION='
+        line: 'IMMICH_VERSION=v2.7.5'
+        create: false
+      when: services.immich.enabled
+      notify: restart immich
+
     - name: Deploy Immich supervisor config
       template:
         src: ../files/supervisord/conf.d/immich.ini
@@ -195,11 +204,11 @@
       when: services.karakeep.enabled
       notify: reload supervisord
 
-    - name: Update Copyparty to latest version
+    - name: Install pinned Copyparty version
       shell: |
         cd {{ user_home }}/copyparty
         rm -f copyparty-sfx.py
-        wget -q https://github.com/9001/copyparty/releases/latest/download/copyparty-sfx.py
+        wget -q https://github.com/9001/copyparty/releases/download/v1.20.16/copyparty-sfx.py
         chmod +x copyparty-sfx.py
       when: services.copyparty.enabled
       notify: restart copyparty
@@ -226,6 +235,55 @@
         dest: "{{ user_home }}/.config/supervisord/conf.d/tiny-stats.ini"
         mode: 0600
       when: services["tiny-stats"].enabled
+      notify: reload supervisord
+
+    - name: Create Gatus directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0700
+      loop:
+        - "{{ user_home }}/gatus"
+        - "{{ user_home }}/gatus/config"
+        - "{{ user_home }}/gatus/data"
+      when: services.gatus.enabled
+
+    - name: Deploy Gatus docker-compose.yml
+      copy:
+        src: ../files/gatus/docker-compose.yml
+        dest: "{{ user_home }}/gatus/docker-compose.yml"
+        mode: 0600
+      when: services.gatus.enabled
+      notify: restart gatus
+
+    - name: Deploy Gatus config
+      copy:
+        src: ../files/gatus/config/config.yaml
+        dest: "{{ user_home }}/gatus/config/config.yaml"
+        mode: 0600
+      when: services.gatus.enabled
+      notify: restart gatus
+
+    - name: Deploy Gatus env placeholder first time only
+      copy:
+        src: ../files/gatus/.env.example
+        dest: "{{ user_home }}/gatus/.env"
+        mode: 0600
+        force: no
+      when: services.gatus.enabled
+
+    - name: Pull Gatus image
+      shell: |
+        cd {{ user_home }}/gatus && podman-compose pull 2>&1
+      when: services.gatus.enabled
+      changed_when: false
+
+    - name: Deploy Gatus supervisor config
+      template:
+        src: ../files/supervisord/conf.d/gatus.ini
+        dest: "{{ user_home }}/.config/supervisord/conf.d/gatus.ini"
+        mode: 0600
+      when: services.gatus.enabled
       notify: reload supervisord
 
     - name: Supervisor starts on reboot via cron
@@ -285,6 +343,14 @@
         podman-compose down && podman-compose up -d
         {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start karakeep
       listen: "restart karakeep"
+
+    - name: restart gatus
+      shell: |
+        cd {{ user_home }}/gatus
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} stop gatus || true
+        podman-compose down && podman-compose up -d
+        {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start gatus || true
+      listen: "restart gatus"
 
     - name: restart copyparty
       command: "{{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} restart copyparty"

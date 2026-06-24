@@ -11,6 +11,7 @@ all:
       radicale_port: 5232
       deluge_web_port: 8112
       tiny_stats_port: 7828
+      gatus_port: 19840
       jellyfin_port: 8096
       domain: x3c.ca
       user_home: /home/dotanarchy

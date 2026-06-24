@@ -2,7 +2,7 @@ name: karakeep
 
 services:
   web:
-    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-0.32.0}
     container_name: karakeep_web
     restart: unless-stopped
     cpus: "2"

@@ -50,6 +50,20 @@
 | Logs | `~/.supervisor/logs/tiny-stats.*` |
 | Restart | `supervisorctl restart tiny-stats` |
 
+## Gatus (Smoke Tests)
+| | |
+|---|---|
+| Type | podman-compose |
+| Port | 19840 |
+| Config | `~/gatus/config/config.yaml`, `~/gatus/.env` |
+| Data | `~/gatus/data/` |
+| Logs | `~/.supervisor/logs/gatus.*` |
+| Restart | `supervisorctl restart gatus` |
+
+Gatus checks the public `x3c.ca` service URLs and sends Discord alerts after
+three consecutive failures. The Discord webhook stays server-side in
+`~/gatus/.env` as `DISCORD_WEBHOOK_URL`.
+
 ## Whatbox-Managed (pre-installed)
 | Service | Port | Notes |
 |---|---|---|

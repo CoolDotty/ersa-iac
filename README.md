@@ -17,6 +17,7 @@ The root domain `x3c.ca` is hosted on GitHub Pages from
 | Tiny-Stats | 7828 | Node.js | service config lives on VPS |
 | [n8n](https://n8n.io) | 5678 | podman-compose | `ansible/files/n8n/` |
 | [Karakeep](https://karakeep.app) | 5272 | podman-compose | `ansible/files/karakeep/` |
+| [Gatus](https://github.com/TwiN/gatus) | 19840 | podman-compose | `ansible/files/gatus/` |
 | **Whatbox-managed (pre-installed)** | | | |
 | Jellyfin | 8096 | Native | via Whatbox CP panel |
 | Deluge + WebUI | 8112 | Native | via Whatbox CP panel |
@@ -71,6 +72,7 @@ Your data stays on the VPS — never in Git:
 | `docker-compose.yml` (n8n, Immich) | `~/immich/Photos/` |
 | Supervisor `.ini` files | `~/immich/postgres/` |
 | `.env` template (n8n) | `~/n8n/.n8n/` (SQLite DB + encryption key) |
+| Gatus monitor config | `~/gatus/data/` (SQLite status history) |
 | | `~/files/` |
 | | All 11TB+ mpath drives |
 

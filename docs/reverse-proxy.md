@@ -13,6 +13,7 @@ via their control panel at [whatbox.ca/manage/domain](https://whatbox.ca/manage/
 | [Radicale](https://radicale.org) | `cal` | `127.0.0.1:5232` | Off |
 | [Tiny-Stats](https://github.com/dot/) | `stats` | `127.0.0.1:7828` | On |
 | [n8n](https://n8n.io) | `n8n` | `127.0.0.1:5678` | On |
+| [Gatus](https://github.com/TwiN/gatus) | `status` | `127.0.0.1:19840` | Off |
 | Jellyfin | *(whatbox-managed)* | `127.0.0.1:8096` | On |
 | Deluge | *(whatbox-managed)* | `127.0.0.1:8112` | Off |
 
@@ -24,6 +25,8 @@ via their control panel at [whatbox.ca/manage/domain](https://whatbox.ca/manage/
 the dashboard — without it the page loads but stays blank.
 
 **n8n** uses WebSockets for live workflow execution updates and UI notifications.
+
+**Gatus** does not need WebSockets for the status dashboard.
 
 ## Whatbox CP Setup
 
