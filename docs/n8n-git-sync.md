@@ -13,9 +13,9 @@ n8n (publish) ──push──> CoolDotty/n8n-workflows (main)
 CoolDotty/n8n-workflows ──pull──> n8n (webhook workflow)
 ```
 
-- **Push**: `sync-to-github.sh` runs every 5 min via cron on the host. Exports published workflows via n8n API, commits changes to GitHub.
+- **Push**: `sync-to-github.sh` runs every 5 min via cron on the host. Exports all visible workflows via n8n API, except explicitly excluded sync-infra workflows, and commits changes to GitHub.
 - **Pull**: GitHub Action POSTs changed filenames to an n8n webhook workflow, which fetches and imports them.
-- **Canonical direction**: GitHub is truth. Local unpublished changes in n8n are skipped (not overwritten).
+- **Canonical direction**: live n8n is authoritative for current workflow state. GitHub is the versioned backup and review surface. Repo pushes can update existing workflows, but active state, credentials, executions, and data tables remain live n8n state.
 
 ## Setup
 
@@ -64,13 +64,16 @@ The webhook validates `X-Sync-Token` header built-in (no external credential nee
 
 ### 4. Exclusion (already configured)
 
-`~/.n8n-sync/config` on the server already has:
+`sync-to-github.sh` excludes the known sync-infra workflow IDs by default:
 ```ini
-EXCLUDE_IDS="cNyZx8zOIOcEa4WT"
+EXCLUDE_IDS="cNyZx8zOIOcEa4WT FxOmPzb0EmlXS2YI"
 ```
+
+`~/.n8n-sync/config` can add more IDs with the same `EXCLUDE_IDS` variable; defaults and config values are merged.
 
 `.gitignore` in the repo already has:
 ```
+workflows/FxOmPzb0EmlXS2YI-*.json
 workflows/cNyZx8zOIOcEa4WT-*.json
 ```
 
