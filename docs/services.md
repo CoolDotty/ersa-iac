@@ -34,9 +34,11 @@
 | | |
 |---|---|
 | Type | podman-compose |
+| Image | `localhost/n8n-libreoffice:2.27.3`, built from `ansible/files/n8n/Containerfile` |
 | Port | 5678 |
 | Config | `~/n8n/` |
 | Data | `~/n8n/.n8n/` (SQLite DB + encryption key), `~/n8n/local-files/` |
+| Custom Nodes | `~/n8n/.n8n/custom/package.json`, deployed from `ansible/files/n8n/custom-package.json` |
 | Logs | `~/.supervisor/logs/n8n.*` |
 | Restart | `supervisorctl restart n8n` |
 | Git Sync | Two-way with CoolDotty/n8n-workflows — see [n8n-git-sync.md](n8n-git-sync.md) |

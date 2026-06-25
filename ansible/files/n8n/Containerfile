@@ -1,0 +1,13 @@
+FROM alpine:3.22 AS apktools
+RUN apk add --no-cache apk-tools-static
+
+FROM docker.io/n8nio/n8n:2.27.3
+
+USER root
+COPY --from=apktools /sbin/apk.static /sbin/apk
+RUN /sbin/apk add --no-cache \
+		--repository=https://dl-cdn.alpinelinux.org/alpine/v3.22/main \
+		--repository=https://dl-cdn.alpinelinux.org/alpine/v3.22/community \
+		libreoffice \
+	&& rm -f /sbin/apk
+USER node

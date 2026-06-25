@@ -4,6 +4,8 @@
   "private": true,
   "type": "commonjs",
   "dependencies": {
+    "@bitovi/n8n-nodes-pdf-to-png": "0.1.3",
+    "n8n-nodes-xlsx-to-pdf": "file:./custom-packages/n8n-nodes-xlsx-to-pdf-0.1.0-124d4f58.tgz",
     "n8n-nodes-quickbooks-web-connector": "github:CoolDotty/n8n-QuickBooks-Web-Connect#046a67daf14e04c4cc10551b6fdfcf1c536d353d"
   }
 }

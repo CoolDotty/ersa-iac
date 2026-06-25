@@ -71,6 +71,14 @@
       when: services.n8n.enabled
       notify: restart n8n
 
+    - name: Deploy n8n Containerfile
+      copy:
+        src: ../files/n8n/Containerfile
+        dest: "{{ user_home }}/n8n/Containerfile"
+        mode: 0600
+      when: services.n8n.enabled
+      notify: restart n8n
+
     - name: Deploy n8n .env
       template:
         src: ../files/n8n/.env.j2
@@ -86,9 +94,9 @@
         mode: 0700
       when: services.n8n.enabled
 
-    - name: Pull latest n8n image
+    - name: Pull n8n base image
       shell: |
-        cd {{ user_home }}/n8n && podman-compose pull 2>&1
+        podman pull docker.io/n8nio/n8n:2.27.3 2>&1
       when: services.n8n.enabled
       changed_when: false
 
@@ -106,6 +114,22 @@
         state: directory
         mode: 0700
       when: services.n8n.enabled
+
+    - name: Ensure n8n custom package tarball directory
+      file:
+        path: "{{ user_home }}/n8n/.n8n/custom/custom-packages"
+        state: directory
+        mode: 0700
+      when: services.n8n.enabled
+
+    - name: Deploy n8n custom package tarballs
+      copy:
+        src: ../files/n8n/custom-packages/
+        dest: "{{ user_home }}/n8n/.n8n/custom/custom-packages/"
+        mode: 0600
+        directory_mode: 0700
+      when: services.n8n.enabled
+      notify: restart n8n
 
     - name: Deploy n8n custom extensions package.json
       copy:
@@ -329,8 +353,8 @@
         cd {{ user_home }}/n8n
         {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} stop n8n
         podman-compose down
-        cd {{ user_home }}/n8n/.n8n/custom && npm install --no-audit --no-fund
-        cd {{ user_home }}/n8n && podman-compose up -d
+        cd {{ user_home }}/n8n/.n8n/custom && npm_config_platform=linux npm_config_arch=x64 npm_config_libc=musl npm install --no-audit --no-fund
+        cd {{ user_home }}/n8n && podman-compose build n8n && podman-compose up -d
         {{ supervisor_venv }}/bin/supervisorctl -c {{ supervisor_config }} start n8n
       listen: "restart n8n"
 
